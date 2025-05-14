@@ -36,6 +36,7 @@
                         <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th class="px-6 py-3">Title</th>
+                                <th class="px-6 py-3">Category</th>
                                 <th class="px-6 py-3">Status</th>
                                 <th class="px-6 py-3">Action</th>
                             </tr>
@@ -47,6 +48,10 @@
                                         <a href="{{ route('todo.edit', $data) }}" class="hover:underline text-xs">
                                             {{ $data->title }}
                                         </a>
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        {{ $data->category->title ?? '-' }}
                                     </td>
 
                                     <td class="px-6 py-4">
@@ -91,13 +96,12 @@
                                                     Delete
                                                 </button>
                                             </form>
-                                            
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                                    <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                    <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                                         No data available
                                     </td>
                                 </tr>
@@ -105,6 +109,7 @@
                         </tbody>
                     </table>
                 </div>
+
                 @if ($todosCompleted > 1)
                 <div class="p-6 text-xl text-gray-900 dark:text-gray-100">
                     <form action="{{ route('todo.deleteallcompleted') }}" method="POST">
@@ -115,7 +120,7 @@
                         </x-primary-button>
                     </form>
                 </div>
-            @endif
+                @endif
             </div>
         </div>
     </div>

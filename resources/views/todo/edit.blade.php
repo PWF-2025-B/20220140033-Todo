@@ -1,26 +1,52 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Todo') }}
-            </h2>
+            {{ __('Edit Todo') }}
+        </h2>
     </x-slot>
 
-    <div class="p-6 text-gray-900 dark:text-gray-100">
-    <form method="post" action="{{ route('todo.update', $todo) }}" class="">
-        @csrf
-        @method('patch')
-        <div class="mb-6">
-            <x-input-label for="title" :value="__('Title')" />
-            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full"
-                :value="old('name', $todo->title)" required autofocus autocomplete="title" />
-            <x-input-error class="mt-2" :messages="$errors->get('title')" />
-        </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <form method="post" action="{{ route('todo.update', $todo) }}">
+                        @csrf
+                        @method('patch')
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-            <x-cancel-button href="{{ route('todo.index') }}" />
-        </div>
-    </form>
-</div>
+                        <div class="mb-6">
+                            <x-input-label for="title" :value="__('Title')" />
+                            <x-text-input id="title" name="title" type="text" class="block w-full mt-1"
+                                :value="old('title', $todo->title)" required autofocus autocomplete="title" />
+                            <x-input-error class="mt-2" :messages="$errors->get('title')" />
+                        </div>
 
+                        <div class="mb-6">
+                            <x-input-label for="category_id" :value="__('Category')" />
+                            <select id="category_id" name="category_id" required
+                                class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                                <option value="" disabled {{ $todo->category_id ? '' : 'selected' }}>Empty</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id', $todo->category_id) == $category->id ? 'selected' : '' }}>
+                                        {{ $category->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <x-primary-button>{{ __('Save') }}</x-primary-button>
+                            <a href="{{ route('todo.index') }}"
+                                class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest
+                                text-gray-700 uppercase transition duration-150 ease-in-out bg-white border
+                                border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-500
+                                dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none
+                                focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800
+                                disabled:opacity-25">{{ __('Cancel') }}</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
