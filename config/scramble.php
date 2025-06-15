@@ -108,4 +108,21 @@ return [
     ],
 
     'extensions' => [],
+
+    'openApi' => [
+        'security' => [
+            [
+                'bearerAuth' => []
+            ]
+        ],
+        'components' => [
+            'securitySchemes' => [
+                'bearerAuth' => [
+                    'type' => 'http',
+                    'scheme' => 'bearer',
+                    'bearerFormat' => 'JWT',
+                ],
+            ],
+        ],
+    ],
 ];

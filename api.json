@@ -1,0 +1,692 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Todo",
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "operationId": "auth.login",
+                "summary": "Login user dengan email dan password",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "minLength": 6
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                500
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Terjadi kesalahan"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                200
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Login berhasil"
+                                            ]
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "email": {
+                                                            "type": "string"
+                                                        },
+                                                        "is_admin": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "id",
+                                                        "name",
+                                                        "email",
+                                                        "is_admin"
+                                                    ]
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "user",
+                                                "token"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                401
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Email atau password salah"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                400
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Email dan password harus diisi"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "operationId": "auth.logout",
+                "summary": "Logout pengguna yang sedang login.\nMenghapus token JWT agar tidak bisa digunakan lagi",
+                "tags": [
+                    "Auth"
+                ],
+                "responses": {
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                500
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Gagal logout, terjadi kesalahan."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                200
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Logout berhasil. Token telah dihapus."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/todos/search": {
+            "get": {
+                "operationId": "todo.search",
+                "summary": "Mencari todo berdasarkan judul atau kategori",
+                "tags": [
+                    "Todo"
+                ],
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                200
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Todo berhasil diambil"
+                                            ]
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/todos": {
+            "get": {
+                "operationId": "todos.index",
+                "summary": "Mengambil semua todo milik pengguna yang terautentikasi",
+                "tags": [
+                    "Todo"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                200
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Todo berhasil diambil"
+                                            ]
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "todos.store",
+                "summary": "Membuat todo baru",
+                "tags": [
+                    "Todo"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "category_id": {
+                                        "type": [
+                                            "integer",
+                                            "null"
+                                        ]
+                                    },
+                                    "is_done": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "title"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                201
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Todo berhasil dibuat"
+                                            ]
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/todos/{id}": {
+            "put": {
+                "operationId": "todos.update",
+                "summary": "Memperbarui todo yang ada",
+                "tags": [
+                    "Todo"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "category_id": {
+                                        "type": [
+                                            "integer",
+                                            "null"
+                                        ]
+                                    },
+                                    "is_done": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "title"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                404
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Todo tidak ditemukan"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                200
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Todo berhasil diperbarui"
+                                            ]
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "todos.destroy",
+                "summary": "Menghapus todo",
+                "tags": [
+                    "Todo"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                404
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Todo tidak ditemukan"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "enum": [
+                                                200
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Todo berhasil dihapus"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "status_code",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "ValidationException": {
+                "description": "Validation error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Errors overview."
+                                },
+                                "errors": {
+                                    "type": "object",
+                                    "description": "A detailed description of each field that failed validation.",
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "errors"
+                            ]
+                        }
+                    }
+                }
+            },
+            "AuthenticationException": {
+                "description": "Unauthenticated",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
